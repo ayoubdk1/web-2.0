@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 if (!ini_get('date.timezone')) {
     ini_set('date.timezone', 'UTC');
 }
@@ -11,7 +10,13 @@ if (is_file(dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit')) {
     } else {
         define('PHPUNIT_COMPOSER_INSTALL', dirname(__DIR__).'/vendor/autoload.php');
         require PHPUNIT_COMPOSER_INSTALL;
-        PHPUnit\TextUI\Command::main();
+
+        if (class_exists('PHPUnit\TextUI\Command')) {
+            
+        } else {
+            echo "PHPUnit\TextUI\Command class not found. Please ensure PHPUnit is correctly installed.\n";
+            exit(1);
+        }
     }
 } else {
     if (!is_file(dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php')) {
