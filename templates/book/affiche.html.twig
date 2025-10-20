@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Books</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f5f7fa; font-family: 'Open Sans', sans-serif; }
+        .container { margin-top: 40px; }
+        .table thead th { background-color: #404e67; color: #fff; }
+        .btn-edit { background: #ffc107; color: #fff; }
+        .btn-delete { background: #e34724; color: #fff; }
+        .btn-edit:hover, .btn-delete:hover { opacity: 0.85; color: #fff; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mb-4 text-center">List Authors</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped shadow">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Publication date</th>
+                    <th>Published</th>
+                    <th>Author</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if publishedBooks|length == 0 %}
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">No books found.</td>
+                    </tr>
+                {% else %}
+                    {% for b in publishedBooks %}
+                        <tr>
+                            <td>{{ b.title }}</td>
+                            <td>{{ b.category }}</td>
+                            <td>{{ b.publicationDate|date('M-d-Y') }}</td>
+                            <td>{{ b.published ? 'Yes' : 'No' }}</td>
+                            <td>{{ b.author.username }}</td>
+                            <td>
+                                <a href="{{ path('app_editBook', {'ref': b.ref}) }}" class="btn btn-edit btn-sm">edit</a>
+                                <a href="{{ path('app_deleteBook', {'ref': b.ref}) }}" class="btn btn-delete btn-sm">delete</a>
+                               <a href="{{ path('app_showBook', {'ref': b.ref}) }}">show</a>
+                                  onclick="return confirm('Are you sure you want to delete this book?');">delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <p>Number of published books: {{ numPublishedBooks }}</p>
+    <p>Number of unpublished books: {{ numUnPublishedBooks }}</p>
+</div>
+</body>
+</html>

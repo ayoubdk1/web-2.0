@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Book Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Book Details</h1>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Ref :</strong> {{ book.ref }}</li>
+        <li class="list-group-item"><strong>Title :</strong> {{ book.title }}</li>
+        <li class="list-group-item"><strong>Category :</strong> {{ book.category }}</li>
+        <li class="list-group-item"><strong>Publication Date :</strong> {{ book.publicationDate|date('Y-m-d') }}</li>
+        <li class="list-group-item"><strong>Published :</strong> {{ book.published ? 'Yes' : 'No' }}</li>
+        <li class="list-group-item"><strong>Author :</strong> {{ book.author.username }}</li>
+        {# Ajoute d’autres attributs si besoin #}
+    </ul>
+    <a href="{{ path('app_AfficheBook') }}" class="btn btn-secondary mt-3">Back to list</a>
+</div>
+</body>
+</html>
