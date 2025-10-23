@@ -22,23 +22,25 @@ final class BookController extends AbstractController
             'controller_name' => 'BookController',
         ]);
     }
-     #[Route('/Affiche', name: 'app_AfficheBook')]
-public function Affiche (BookRepository $repository, EntityManagerInterface $em)
+  #[Route('/Affiche', name: 'app_AfficheBook')]
+public function Affiche(BookRepository $repository, EntityManagerInterface $em)
 {
     $publishedBooks = $em->getRepository(Book::class)->findBy(['published' => true]);
     $numPublishedBooks = count($publishedBooks);
     $numUnPublishedBooks = count($em->getRepository(Book::class)->findBy(['published' => false]));
-
-    // Remove the conditional below:
-    // if ($numPublishedBooks > 0) { ... } else { ... }
-    // Always render the same template and let Twig handle the display
-
+    
+    // NEW: Count Romance books
+    $numRomanceBooks = $repository->countRomanceBooks();
+    
     return $this->render('book/Affiche.html.twig', [
         'publishedBooks' => $publishedBooks,
         'numPublishedBooks' => $numPublishedBooks,
-        'numUnPublishedBooks' => $numUnPublishedBooks
+        'numUnPublishedBooks' => $numUnPublishedBooks,
+        'numRomanceBooks' => $numRomanceBooks  // Pass to template
     ]);
 }
+
+
 
 
 
@@ -108,5 +110,20 @@ public function show($ref, BookRepository $repository)
         'book' => $book,
     ]);
 }
+#[Route('/books-by-date', name: 'app_books_by_date')]
+public function booksByDateRange(BookRepository $repository): Response
+{
+    $startDate = new \DateTime('2014-01-01');
+    $endDate = new \DateTime('2018-12-31');
+    
+    $books = $repository->findBooksByDateRange($startDate, $endDate);
+    
+    return $this->render('book/books_by_date.html.twig', [
+        'books' => $books,
+        'startDate' => $startDate,
+        'endDate' => $endDate
+    ]);
+}
+
 
 }

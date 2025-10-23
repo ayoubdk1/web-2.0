@@ -1,33 +1,53 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<h1>List authors</h1>
-<table border="1">
-<tr>
-    <th>Username</th>
-    <th>Email</th>
-    <th>nb books</th>
-    <th>edit</th>
-    <th>delete</th>
-</tr>
+{% extends 'base.html.twig' %}
 
-      <tr>  {% for a in author %} </tr>
-        <td>{{ a.username }}</td>
-        <td> {{ a.email }}</td>
-    <td>{{ a.nb_books }}</td>
-    <td><a href="{{ path('app_edit', {'id': a.id}) }}">edit</a></td>
-    <td><a href="{{ path('app_delete', {'id': a.id}) }}">delete</a></td>
+{% block body %}
+<div class="container">
+    <h1>Authors List</h1>
+    <div style="margin-bottom: 15px;">
+    <a href="{{ path('app_delete_authors_no_books') }}" 
+       class="btn btn-danger" 
+       onclick="return confirm('Are you sure you want to delete all authors with 0 books?');">
+        Delete Authors with 0 Books
+    </a>
+</div>
 
-
-    {% endfor %}
-
-</table>
-</body>
-</html>
+    {# Search Form #}
+    <div class="search-box" style="margin-bottom: 20px; padding: 15px; background: #f5f5f5;">
+        <h3>Search author by number of books</h3>
+        <form method="get" action="{{ path('app_affiche') }}">
+            <label>Min Number:</label>
+            <input type="number" name="min_books" value="{{ minBooks }}" placeholder="0">
+            
+            <label>Max Number:</label>
+            <input type="number" name="max_books" value="{{ maxBooks }}" placeholder="100">
+            
+            <button type="submit">Search</button>
+            <a href="{{ path('app_affiche') }}">Clear</a>
+        </form>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Number of books</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in author %}
+            <tr>
+                <td>{{ a.username }}</td>
+                <td>{{ a.email }}</td>
+                <td>{{ a.nbBooks }}</td>
+                <td>
+                    <a href="{{ path('app_edit', {'id': a.id}) }}">edit</a>
+                    <a href="{{ path('app_delete', {'id': a.id}) }}">delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

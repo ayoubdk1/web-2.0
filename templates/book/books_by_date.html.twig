@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Books Published 2014-2018{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 20px;">
+    <h1>Books Published between {{ startDate|date('Y-m-d') }} and {{ endDate|date('Y-m-d') }}</h1>
+    
+    {% if books|length > 0 %}
+        <p>Found <strong>{{ books|length }}</strong> books in this date range.</p>
+        
+        <table class="table" border="1" style="width: 100%; border-collapse: collapse;">
+            <thead style="background-color: #f0f0f0;">
+                <tr>
+                    <th style="padding: 10px;">Title</th>
+                    <th style="padding: 10px;">Publication Date</th>
+                    <th style="padding: 10px;">Published</th>
+                    <th style="padding: 10px;">Category</th>
+                    <th style="padding: 10px;">Author</th>
+                    <th style="padding: 10px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td style="padding: 8px;">{{ book.title }}</td>
+                    <td style="padding: 8px;">{{ book.publicationDate|date('M d, Y') }}</td>
+                    <td style="padding: 8px;">{{ book.published ? '1' : '0' }}</td>
+                    <td style="padding: 8px;">{{ book.category }}</td>
+                    <td style="padding: 8px;">
+                        {{ book.author ? book.author.username : 'N/A' }}
+                    </td>
+                    <td style="padding: 8px;">
+                        <a href="{{ path('app_showBook', {'ref': book.ref}) }}">show</a> | 
+                        <a href="{{ path('app_editBook', {'ref': book.ref}) }}">edit</a> | 
+                        <a href="{{ path('app_deleteBook', {'ref': book.ref}) }}">delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; margin-top: 20px;">
+            <p><strong>No books found</strong> in the date range {{ startDate|date('Y-m-d') }} to {{ endDate|date('Y-m-d') }}.</p>
+            <p>Try adding some books with publication dates between 2014 and 2018.</p>
+        </div>
+    {% endif %}
+    
+    <div style="margin-top: 20px;">
+        <a href="{{ path('app_AfficheBook') }}" class="btn">← Back to All Books</a>
+        <hr>
+        <a href="{{ path('app_AddBook') }}" class="btn">Add New Book</a>
+    </div>
+</div>
+{% endblock %}

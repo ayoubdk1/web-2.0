@@ -1,2 +1,180 @@
-<h1>add Book</h1>
-{{ form(f) }}
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Book{% endblock %}
+
+{% block body %}
+<style>
+    .book-form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .book-form-container h1 {
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 28px;
+        text-align: center;
+        border-bottom: 3px solid #007bff;
+        padding-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="date"],
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-group input[type="text"]:focus,
+    .form-group input[type="date"]:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    
+    .form-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        cursor: pointer;
+    }
+    
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+    }
+    
+    .checkbox-wrapper label {
+        margin: 0;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    }
+    
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+    
+    .btn-back {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-back:hover {
+        background: #5a6268;
+        text-decoration: none;
+    }
+    
+    .form-hint {
+        font-size: 12px;
+        color: #888;
+        margin-top: 5px;
+    }
+    
+    .required {
+        color: #dc3545;
+        margin-left: 3px;
+    }
+</style>
+
+<div class="book-form-container">
+    <h1>📚 Add New Book</h1>
+    
+    {{ form_start(f) }}
+    
+    <div class="form-group">
+        {{ form_label(f.title) }}
+        <span class="required">*</span>
+        {{ form_widget(f.title, {'attr': {'placeholder': 'Enter book title'}}) }}
+        <div class="form-hint"></div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(f.category) }}
+        <span class="required">*</span>
+        {{ form_widget(f.category) }}
+        <div class="form-hint">Select the book category</div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(f.publicationDate) }}
+        <span class="required">*</span>
+        {{ form_widget(f.publicationDate) }}
+        <div class="form-hint">Choose the publication date</div>
+    </div>
+    
+    <div class="form-group">
+        <div class="checkbox-wrapper">
+            {{ form_widget(f.published) }}
+            {{ form_label(f.published, 'Mark as Published') }}
+        </div>
+        <div class="form-hint">Check if the book is already published</div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(f.author) }}
+        <span class="required">*</span>
+        {{ form_widget(f.author) }}
+        <div class="form-hint">Select the author from the list</div>
+    </div>
+    
+    <div class="form-group">
+        {{ form_widget(f.Ajouter, {'attr': {'class': 'btn-submit'}}) }}
+    </div>
+    
+    {{ form_end(f) }}
+    
+    <div style="text-align: center;">
+        <a href="{{ path('app_AfficheBook') }}" class="btn-back">← Back to Books List</a>
+    </div>
+</div>
+{% endblock %}

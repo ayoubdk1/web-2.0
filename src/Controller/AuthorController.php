@@ -56,13 +56,24 @@ array('id' => 3, 'picture' => '/images/Taha_Hussein.jpg','username' => 'Taha Hus
      
 
         #[Route('/affiche', name: 'app_affiche')]
+public function Affiche(Request $request, AuthorRepository $repository)
+{
+    $minBooks = $request->query->get('min_books');
+    $maxBooks = $request->query->get('max_books');
+    
+    if ($minBooks !== null && $maxBooks !== null) {
+        $authors = $repository->findByBookCountRange((int)$minBooks, (int)$maxBooks);
+    } else {
+        $authors = $repository->findAll();
+    }
+    
+    return $this->render('author/Affiche.html.twig', [
+        'author' => $authors,
+        'minBooks' => $minBooks,
+        'maxBooks' => $maxBooks
+    ]);
+}
 
-
-    public function Affiche (AuthorRepository $repository)
-        {
-            $author=$repository->findAll() ; //select *
-            return $this->render('author/Affiche.html.twig',['author'=>$author]);
-        }
         
 #[Route('/addStatique', name: 'app_addStatique')]
 public function addStatique(EntityManagerInterface $entityManager): Response
@@ -117,4 +128,20 @@ return $this->render('author/Add.html.twig',['form'=>$form->createView()]);
 
         return $this->redirectToRoute('app_affiche');
     }
+    #[Route('/delete-authors-no-books', name: 'app_delete_authors_no_books')]
+public function deleteAuthorsWithNoBooks(AuthorRepository $repository, EntityManagerInterface $entityManager): Response
+{
+    $authors = $repository->findBy(['nb_books' => 0]);
+    
+    $count = count($authors);
+    foreach ($authors as $author) {
+        $entityManager->remove($author);
+    }
+    
+    $entityManager->flush();
+    
+    $this->addFlash('success', "$count author(s) with 0 books deleted successfully.");
+    
+    return $this->redirectToRoute('app_affiche');
+}
 }
